@@ -1,0 +1,73 @@
+// Program created by Vishnu Prasad B
+// prasadbajadka@gmail.com
+
+#include<stdio.h>
+#include<math.h>
+#include<string.h>
+#include<stdlib.h>
+
+// Combine stage.
+void Merge(int *A,int *left,int LC,int *right,int RC,long int* count){
+int i=0,j=0,k=0;
+
+/* Just for confirmation of the passed elemnts in to the subarray
+printf("\n%d",*left);
+printf(" %d",LC);
+printf(" %d",*right);
+printf(" %d",RC);
+//printf(" %lu",count);
+printf(" %lu",*count);*/
+while(i<LC && j<RC){
+    if(left[i]<right[j]){
+            A[k++]=left[i++];
+    }
+    else{
+            A[k++]=right[j++];
+            *count=*count+(LC-i);
+            printf(" %lu",*count);
+    }
+}
+while(i<LC)A[k++]=left[i++];
+while(j<RC)A[k++]=right[j++];
+
+}
+
+// Splitting the right and left segments
+void mergesort(int *a,int n,long int* d){
+int mid,*left,*right,i;
+if(n<2) return;
+mid=n/2;
+left=(int*) calloc(mid,sizeof(int));
+right=(int*) calloc((n-mid),sizeof(int));
+for(i=0;i<mid;i++){
+    left[i]=a[i];
+}
+for(i=mid;i<n;i++){
+    right[i-mid]=a[i];
+}
+mergesort(left,mid,d);
+mergesort(right,n-mid,d);
+Merge(a,left,mid,right,n-mid,d);
+free (left);
+free (right);
+}
+
+//main funtion
+int main(){
+int i,n;
+long int *d=(long int*)malloc(sizeof(int));
+*d=0;
+scanf("%d\n",&n);
+int *a=(int*) calloc(n,sizeof(int));
+for(i=0;i<n;i++){
+    scanf("%d",&a[i]);
+}
+mergesort(a,n,d);
+
+//  Displaying the elements in the ascending order
+printf("\n");
+for (i=0;i<n;i++)printf("%d ",a[i]);
+
+printf("\n%lu",*d);
+return 0;
+}
